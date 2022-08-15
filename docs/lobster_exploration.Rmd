@@ -1,0 +1,74 @@
+---
+title: "eds221-day6-activity_task2"
+author: "Kiran Favre"
+date: "2022-08-15"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(tidyverse)
+library(here)
+library(janitor)
+```
+
+```{r}
+lobsters <- read_csv(here("data","Lobster_Abundance_All_Years_20210412.csv"), na = c("-99999", "")) |> 
+  clean_names() |> 
+  uncount(count) #takes out the column 'count' and makes those new rows
+
+```
+
+### Create a summary table that finds total counts and mean carapace lengths (size_mm) observed by site and year
+
+-   group by (site) and summarize by ()
+
+```{r}
+mean_carapace_lengths <- lobsters |> 
+  group_by(site, year) |> 
+  summarize(lobsters_at_site = n(), mean_carapace = mean(size_mm), na.rm = TRUE)
+
+```
+
+```{r}
+ggplot(mean_carapace_lengths) +
+  geom_line(aes(x= year, y= lobsters_at_site, color = site)) 
+ 
+```
+
+### Find the proportion of legal lobsters at each site for 2020
+
+Create data set only looking at 2020 data
+
+```{r}
+legal_lobster_2020 <- lobsters |> 
+  filter(year == 2020)
+```
+
+Find count of lobsters at each site that are legal
+
+```{r}
+legal_lobster_df <- legal_lobster_2020 |> 
+  mutate( legal = ifelse(size_mm <= 79.76, "illegal", "legal"))
+
+
+legal_lobster_count <- legal_lobster_df |> 
+  group_by(legal, site) |> 
+  summarize(count= n())
+```
+
+Stacked column graph
+
+```{r}
+ggplot(legal_lobster_count, aes(x = site, y = count, fill = legal)) + geom_col(position = "fill")
+```
+
+### Task 3
+
+### Random lobster wrangling 
+
+```{r}
+ex_a <- lobsters |> 
+  filter(site == c("IVEE","CARP", "NAPL"))
+
+```
