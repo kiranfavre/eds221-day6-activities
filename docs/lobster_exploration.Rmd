@@ -42,7 +42,7 @@ Create data set only looking at 2020 data
 
 ```{r}
 legal_lobster_2020 <- lobsters |> 
-  filter(year == 2020)
+  filter(year == 2020) 
 ```
 
 Find count of lobsters at each site that are legal
@@ -65,7 +65,7 @@ ggplot(legal_lobster_count, aes(x = site, y = count, fill = legal)) + geom_col(p
 
 ### Task 3
 
-### Random lobster wrangling 
+### Random lobster wrangling
 
 ```{r}
 ex_a <- lobsters |> 
